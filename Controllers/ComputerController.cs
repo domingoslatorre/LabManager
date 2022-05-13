@@ -1,6 +1,6 @@
-using System.Text;
 using LabManager.Models;
 using LabManager.Repositories;
+using LabManager.Views;
 
 namespace LabManager.Controllers;
 
@@ -12,25 +12,19 @@ class ComputerController
 
     public string Index()
     {
-        StringBuilder sb = new StringBuilder();
-        sb.AppendLine("Computer List");
-        foreach (var computer in repository.GetAll())
-        {
-            sb.AppendLine($"{computer.Id}, {computer.Ram}, {computer.Processor}");
-        }
-
-        return sb.ToString();
+        var computers = repository.GetAll();
+        return new ComputerIndex().Render(computers);
     }
 
     public string Create(Computer computer)
     {
         if(repository.Exists(computer.Id))
         {
-            return $"Computer with id {computer.Id} already exists";
+            return new AlreadyExistsError().Render("Computer", computer.Id);
         }
         
-        repository.Save(computer);
-        return "Computer New";
+        var newComputer = repository.Save(computer);
+        return new ComputerCreate().Render(newComputer);
     }
     
 }
