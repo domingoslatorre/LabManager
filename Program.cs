@@ -1,8 +1,11 @@
 ﻿using LabManager.Database;
-using Microsoft.Data.Sqlite;
+using LabManager.Models;
+using LabManager.Repositories;
 
 var databaseConfig = new DatabaseConfig();
 new DatabaseSetup(databaseConfig);
+
+var computerRepository = new ComputerRepository(databaseConfig);
 
 // Routing
 var modelName = args[0];
@@ -13,18 +16,10 @@ if(modelName == "Computer")
     if(modelAction == "List")
     {
         Console.WriteLine("Computer List");
-        var connection = new SqliteConnection(databaseConfig.ConnectionString);
-        connection.Open();
-
-        var command = connection.CreateCommand();
-        command.CommandText = "SELECT * FROM Computers";
-
-        var reader = command.ExecuteReader();
-        while(reader.Read())
+        foreach (var computer in computerRepository.GetAll())
         {
-            Console.WriteLine("{0}, {1}, {2}", reader.GetInt32(0), reader.GetString(1), reader.GetString(2));
+            Console.WriteLine("{0}, {1}, {2}", computer.Id, computer.Ram, computer.Processor);
         }
-        connection.Close();
     }
 
     if(modelAction == "New")
@@ -33,17 +28,6 @@ if(modelName == "Computer")
         var id = Convert.ToInt32(args[2]);
         var ram = args[3];
         var processor = args[4];
-
-        var connection = new SqliteConnection("Data Source=database.db");
-        connection.Open();
-
-        var command = connection.CreateCommand();
-        command.CommandText = "INSERT INTO Computers VALUES ($id, $ram, $processor)";
-        command.Parameters.AddWithValue("$id", id);
-        command.Parameters.AddWithValue("$ram", ram);
-        command.Parameters.AddWithValue("$processor", processor);
-
-        command.ExecuteNonQuery();
-        connection.Close();
+        computerRepository.Save(new Computer(id, ram, processor));
     }
 }
