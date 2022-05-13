@@ -24,6 +24,11 @@ class ComputerController
 
     public string Create(Computer computer)
     {
+        if(repository.Exists(computer.Id))
+        {
+            return $"Computer with id {computer.Id} already exists";
+        }
+        
         repository.Save(computer);
         return "Computer New";
     }

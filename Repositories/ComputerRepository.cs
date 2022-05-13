@@ -13,6 +13,18 @@ class ComputerRepository : IComputerRepository
         this.databaseConfig = databaseConfig;
     }
 
+    public bool Exists(int id)
+    {
+        using var connection = GetConnection();
+        connection.Open();
+
+        var command = new SqliteCommand("SELECT count(*) FROM Computers WHERE id = $id", connection);
+        command.Parameters.AddWithValue("$id", id);
+        int numberOfComputers = Convert.ToInt32(command.ExecuteScalar());
+        
+        return numberOfComputers > 0;
+    }
+
     public IEnumerable<Computer> GetAll()
     {
         using var connection = GetConnection();
