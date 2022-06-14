@@ -21,7 +21,7 @@ class ComputerRepository
         connection.Open();
 
         var command = connection.CreateCommand();
-        command.CommandText = "SELECT * FROM Computers";
+        command.CommandText = "SELECT * FROM Computers;";
 
         var reader = command.ExecuteReader();
         
@@ -42,7 +42,7 @@ class ComputerRepository
         connection.Open();
 
         var command = connection.CreateCommand();
-        command.CommandText = "INSERT INTO Computers VALUES($id, $ram, $processor)";
+        command.CommandText = "INSERT INTO Computers VALUES($id, $ram, $processor);";
         command.Parameters.AddWithValue("$id", computer.Id);
         command.Parameters.AddWithValue("$ram", computer.Ram);
         command.Parameters.AddWithValue("$processor", computer.Processor);
@@ -59,7 +59,7 @@ class ComputerRepository
         connection.Open();
 
         var command = connection.CreateCommand();
-        command.CommandText = "SELECT * FROM Computers WHERE (id = $id)";
+        command.CommandText = "SELECT * FROM Computers WHERE id = $id;";
         command.Parameters.AddWithValue("$id", id);
 
         var reader = command.ExecuteReader();
@@ -78,7 +78,7 @@ class ComputerRepository
         connection.Open();
 
         var command = connection.CreateCommand();
-        command.CommandText = "UPDATE Computers SET ram = $ram, processor = $processor WHERE (id = $id)";
+        command.CommandText = "UPDATE Computers SET ram = $ram, processor = $processor WHERE id = $id;";
         command.Parameters.AddWithValue("$id", computer.Id);
         command.Parameters.AddWithValue("$ram", computer.Ram);
         command.Parameters.AddWithValue("$processor", computer.Processor);
@@ -95,7 +95,7 @@ class ComputerRepository
         connection.Open();
 
         var command = connection.CreateCommand();
-        command.CommandText = "DELETE FROM Computers WHERE (id = $id)";
+        command.CommandText = "DELETE FROM Computers WHERE id = $id;";
         command.Parameters.AddWithValue("$id", id);
 
         command.ExecuteNonQuery();
@@ -108,7 +108,7 @@ class ComputerRepository
         connection.Open();
 
         var command = connection.CreateCommand();
-        command.CommandText = "SELECT count(id) FROM Computers WHERE (id = $id)";
+        command.CommandText = "SELECT count(id) FROM Computers WHERE id = $id;";
         command.Parameters.AddWithValue("$id", id);
 
         // var reader = command.ExecuteReader();
